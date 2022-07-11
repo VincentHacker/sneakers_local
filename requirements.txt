@@ -1,0 +1,14 @@
+Django
+djangorestframework
+psycopg2-binary
+Pillow
+
+django-filter
+python-decouple
+djangorestframework_simplejwt
+python-slugify
+wheel
+drf-yasg
+
+gunicorn
+django-cors-headers
