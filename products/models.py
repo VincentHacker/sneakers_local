@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth import get_user_model
 from slugify import slugify
 
 class Brand(models.Model):
@@ -12,7 +11,7 @@ class Brand(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        super(Brand, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
     
     class Meta:
         verbose_name = 'Брэнд'
@@ -29,7 +28,7 @@ class SneakersType(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        super(SneakersType, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
     
     class Meta:
         verbose_name = 'Тип'
@@ -62,7 +61,7 @@ class Product(models.Model):
     size = models.CharField(max_length=20, choices=SIZE_CHOICE)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField()
+    image = models.ImageField(upload_to='products', null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -71,27 +70,3 @@ class Product(models.Model):
         verbose_name = 'Кроссовки'
         verbose_name_plural = 'Кроссовки'
 
-
-class Comment(models.Model):
-    RATING_CHOICE = (
-        (1, '*'),
-        (2, '**'),
-        (3, '***'),
-        (4, '****'),
-        (5, '*****'),
-    )
-
-    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='review')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='review')
-    text = models.TextField()
-    rating = models.CharField(max_length=5, choices=RATING_CHOICE, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'Comment from {self.author.name} to {self.product}'
-
-    class Meta:
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
-        ordering = ['-create_date']
