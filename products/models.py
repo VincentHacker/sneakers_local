@@ -2,16 +2,16 @@ from django.db import models
 from slugify import slugify
 
 class Brand(models.Model):
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, primary_key=True)
     slug = models.SlugField(max_length=150, blank=True)
 
     def __str__(self):
         return self.name
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
+        super(Brand, self).save(*args, **kwargs)
     
     class Meta:
         verbose_name = 'Брэнд'
@@ -19,17 +19,17 @@ class Brand(models.Model):
 
 
 class SneakersType(models.Model):
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, primary_key=True)
     slug = models.SlugField(max_length=150, blank=True)
-
+    
     def __str__(self):
         return self.name
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-    
+        super(SneakersType, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Тип'
         verbose_name_plural = 'Типы'
@@ -52,6 +52,7 @@ class Product(models.Model):
         ('42', '42'),
         ('43', '43'),
         ('44', '44'),
+        ('45', '45'),
     )
 
     title = models.CharField(max_length=155)
