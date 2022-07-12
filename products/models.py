@@ -43,23 +43,23 @@ class Product(models.Model):
     )
 
     SIZE_CHOICE = (
-        ('36', '36'),
-        ('37', '37'),
-        ('38', '38'),
-        ('39', '39'),
-        ('40', '40'),
-        ('41', '41'),
-        ('42', '42'),
-        ('43', '43'),
-        ('44', '44'),
-        ('45', '45'),
+        (36, '36'),
+        (37, '37'),
+        (38, '38'),
+        (39, '39'),
+        (40, '40'),
+        (41, '41'),
+        (42, '42'),
+        (43, '43'),
+        (44, '44'),
+        (45, '45'),
     )
 
     title = models.CharField(max_length=155)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='product')
     sneakers_type = models.ForeignKey(SneakersType, on_delete=models.CASCADE, related_name='product')
     male = models.CharField(max_length=20, choices=MALE_CHOICE, default='Все')
-    size = models.CharField(max_length=20, choices=SIZE_CHOICE)
+    size = models.IntegerField(choices=SIZE_CHOICE)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='products', null=True, blank=True)
