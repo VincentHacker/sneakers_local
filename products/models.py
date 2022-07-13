@@ -1,5 +1,6 @@
 from django.db import models
 from slugify import slugify
+from django.contrib.auth import get_user_model
 
 class Brand(models.Model):
     name = models.CharField(max_length=150, primary_key=True)
@@ -70,3 +71,32 @@ class Product(models.Model):
         verbose_name = 'Кроссовки'
         verbose_name_plural = 'Кроссовки'
 
+
+
+class CommentRating(models.Model):
+    rating_choice = (
+        (1, '🌟'),
+        (2, '🌟🌟'),
+        (3, '🌟🌟🌟'),
+        (4, '🌟🌟🌟🌟'),
+        (5, '🌟🌟🌟🌟🌟'),
+    )
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='comments')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField(blank=True, null=True)
+    rating = models.IntegerField(choices=rating_choice, blank=True, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        if self.rating and self.text:
+            return f'Comment and rating from {self.author.name} to {self.product}'
+        elif self.rating:
+            return f'Rating from {self.author.name} to {self.product}'
+        elif self.text:
+            return f'Comment from {self.author.name} to {self.product}'
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ['-create_date']
