@@ -24,6 +24,10 @@ class Order(models.Model):
     def __str__(self) -> str:
         return f'Order #{self.id}'
 
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
 
 class OrderItems(models.Model):
     order = models.ForeignKey(Order, on_delete=models.RESTRICT, related_name='items')
