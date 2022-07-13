@@ -37,7 +37,6 @@ class SneakersType(models.Model):
 
 class Product(models.Model):
     MALE_CHOICE = (
-        ('all', 'Все'),
         ('male', 'Мужские'),
         ('female', 'Женские'),
     )
@@ -58,7 +57,7 @@ class Product(models.Model):
     title = models.CharField(max_length=155)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='product')
     sneakers_type = models.ForeignKey(SneakersType, on_delete=models.CASCADE, related_name='product')
-    male = models.CharField(max_length=20, choices=MALE_CHOICE, default='Все')
+    male = models.CharField(max_length=20, choices=MALE_CHOICE)
     size = models.IntegerField(choices=SIZE_CHOICE)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
