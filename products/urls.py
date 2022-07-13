@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 
 
 router = DefaultRouter()
-router.register('', ProductViewSet)
+router.register('products', ProductViewSet)
 
 urlpatterns = []
 urlpatterns += router.urls # urlpatterns.extend(router.urls)
