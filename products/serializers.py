@@ -20,7 +20,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = '__all__'
+        fields = ['boots', 'image']
 
 
 class ProductSerializer(serializers.ModelSerializer):
