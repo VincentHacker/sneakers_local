@@ -76,7 +76,7 @@ class Image(models.Model):
     image = models.ImageField(upload_to='products')
 
     def __str__(self):
-        return self.image
+        return self.boots
     
     class Meta:
         verbose_name = 'Картина'
