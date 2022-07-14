@@ -1,6 +1,18 @@
 from rest_framework import serializers
 
-from .models import Product, CommentRating, Image
+from .models import Product, CommentRating, Image, Brand, SneakersType
+
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = ['name']
+
+
+class SnekersTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SneakersType
+        fields = ['name']
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.email')

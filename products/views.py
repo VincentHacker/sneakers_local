@@ -6,8 +6,8 @@ from rest_framework import permissions
 
 from products.filters import ProductPriceFilter
 
-from .models import Product, CommentRating, Image
-from .serializers import ProductSerializer, ReviewSerializer, ImageSerializer
+from .models import Product, CommentRating, Image, Brand, SneakersType
+from .serializers import BrandSerializer, ProductSerializer, ReviewSerializer, ImageSerializer, SnekersTypeSerializer
 from .permissions import IsAuthor
 
 
@@ -43,3 +43,34 @@ class CommentViewSet(ModelViewSet):
 class ImageView(ModelViewSet):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [permissions.AllowAny]
+        elif self.action in ['destroy', 'update', 'partial_update', 'create']:
+            self.permission_classes = [permissions.IsAdminUser]
+        return super().get_permissions()
+
+
+class BrandViewSet(ModelViewSet):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [permissions.AllowAny]
+        elif self.action in ['destroy', 'update', 'partial_update', 'create']:
+            self.permission_classes = [permissions.IsAdminUser]
+        return super().get_permissions()
+
+
+class SneakersTypeViewSet(ModelViewSet):
+    queryset = SneakersType.objects.all()
+    serializer_class = SnekersTypeSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [permissions.AllowAny]
+        elif self.action in ['destroy', 'update', 'partial_update', 'create']:
+            self.permission_classes = [permissions.IsAdminUser]
+        return super().get_permissions()

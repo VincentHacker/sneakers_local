@@ -3,8 +3,8 @@ from slugify import slugify
 from django.contrib.auth import get_user_model
 
 class Brand(models.Model):
-    name = models.CharField(max_length=150, primary_key=True)
-    slug = models.SlugField(max_length=150, blank=True)
+    name = models.CharField(max_length=150)
+    slug = models.SlugField(max_length=150, blank=True, primary_key=True)
 
     def __str__(self):
         return self.name
@@ -20,8 +20,8 @@ class Brand(models.Model):
 
 
 class SneakersType(models.Model):
-    name = models.CharField(max_length=150, primary_key=True)
-    slug = models.SlugField(max_length=150, blank=True)
+    name = models.CharField(max_length=150)
+    slug = models.SlugField(max_length=150, blank=True, primary_key=True)
     
     def __str__(self):
         return self.name
