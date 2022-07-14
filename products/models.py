@@ -75,8 +75,8 @@ class Image(models.Model):
     boots = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='boots_image')
     image = models.ImageField(upload_to='products')
 
-    def __str__(self):
-        return f'{self.boots}'
+    # def __str__(self):
+    #     return f'{self.boots}'
     
     class Meta:
         verbose_name = 'Картина'
