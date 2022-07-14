@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
@@ -6,8 +5,8 @@ from rest_framework import permissions
 
 from products.filters import ProductPriceFilter
 
-from .models import Product, CommentRating, Image, Brand, SneakersType
-from .serializers import BrandSerializer, ProductSerializer, ReviewSerializer, ImageSerializer, SnekersTypeSerializer
+from .models import Favorites, Like, Product, CommentRating, Image, Brand, SneakersType
+from .serializers import BrandSerializer, FavoritesSerializer, LikeSerializer, ProductSerializer, ReviewSerializer, ImageSerializer, SnekersTypeSerializer
 from .permissions import IsAuthor
 
 
@@ -33,6 +32,25 @@ class ProductViewSet(ModelViewSet):
 class CommentViewSet(ModelViewSet):
     queryset = CommentRating.objects.all()
     serializer_class = ReviewSerializer
+
+    def get_permissions(self):
+        if self.action in ['destroy', 'update', 'partial_update']:
+            self.permission_classes = [IsAuthor]
+        return super().get_permissions()
+
+
+class LikeViewSet(ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+    def get_permissions(self):
+        if self.action in ['destroy', 'update', 'partial_update']:
+            self.permission_classes = [IsAuthor]
+        return super().get_permissions()
+
+class FavoritesViewSet(ModelViewSet):
+    queryset = Favorites.objects.all()
+    serializer_class = FavoritesSerializer
 
     def get_permissions(self):
         if self.action in ['destroy', 'update', 'partial_update']:
