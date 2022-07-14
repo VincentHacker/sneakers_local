@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, CommentRating
+from .models import Product, CommentRating, Image
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.email')
@@ -15,6 +15,12 @@ class ReviewSerializer(serializers.ModelSerializer):
         validated_data['author'] = user
 
         return super().create(validated_data)
+    
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ['image']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -24,6 +30,7 @@ class ProductSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         rep = super().to_representation(instance)
+        rep['image'] = ImageSerializer(instance.boots_image.all(), many=True).data
         rep['rating'] = ReviewSerializer(instance.comments.all(), many=True).data
         rep['comments'] = ReviewSerializer(instance.comments.all(), many=True).data
 

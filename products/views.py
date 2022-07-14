@@ -6,8 +6,8 @@ from rest_framework import permissions
 
 from products.filters import ProductPriceFilter
 
-from .models import Product, CommentRating
-from .serializers import ProductSerializer, ReviewSerializer
+from .models import Product, CommentRating, Image
+from .serializers import ProductSerializer, ReviewSerializer, ImageSerializer
 from .permissions import IsAuthor
 
 
@@ -38,3 +38,8 @@ class CommentViewSet(ModelViewSet):
         if self.action in ['destroy', 'update', 'partial_update']:
             self.permission_classes = [IsAuthor]
         return super().get_permissions()
+
+
+class ImageView(ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
