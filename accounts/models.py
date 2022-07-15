@@ -56,7 +56,7 @@ class User(AbstractBaseUser):
         return code
 
     def send_activation_code(self):
-        activation_link = f'http://127.0.0.1:8000/account/activation/{self.activation_code}'
+        activation_link = f'https://dry-sands-45075.herokuapp.com/account/activation/{self.activation_code}'
         send_mail(
             'Account activation', 
             message=activation_link, 

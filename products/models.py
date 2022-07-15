@@ -5,8 +5,8 @@ from django.contrib.auth import get_user_model
 from accounts.models import User # likes
 
 class Brand(models.Model):
-    name = models.CharField(max_length=150, primary_key=True)
-    slug = models.SlugField(max_length=150, blank=True)
+    name = models.CharField(max_length=150)
+    slug = models.SlugField(max_length=150, blank=True, primary_key=True)
 
     def __str__(self):
         return self.name
@@ -22,8 +22,8 @@ class Brand(models.Model):
 
 
 class SneakersType(models.Model):
-    name = models.CharField(max_length=150, primary_key=True)
-    slug = models.SlugField(max_length=150, blank=True)
+    name = models.CharField(max_length=150)
+    slug = models.SlugField(max_length=150, blank=True, primary_key=True)
     
     def __str__(self):
         return self.name
@@ -64,8 +64,6 @@ class Product(models.Model):
     size = models.IntegerField(choices=SIZE_CHOICE)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='products', null=True, blank=True)
-    likes = models.ManyToManyField(User, related_name='user_likes') # likes
 
     def __str__(self):
         return self.title
@@ -74,6 +72,17 @@ class Product(models.Model):
         verbose_name = 'Кроссовки'
         verbose_name_plural = 'Кроссовки'
 
+
+class Image(models.Model):
+    boots = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='boots_image')
+    image = models.ImageField(upload_to='products')
+
+    def __str__(self):
+        return f'{self.boots}'
+    
+    class Meta:
+        verbose_name = 'Картина'
+        verbose_name_plural = 'Картины'
 
 
 class CommentRating(models.Model):
@@ -103,3 +112,28 @@ class CommentRating(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
         ordering = ['-create_date']
+
+
+class Favorites(models.Model):
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='favorites')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorites')
+    favorites = models.BooleanField(default=False, blank=True)
+
+    def __str__(self):
+        return f'{self.author.name} favorites {self.product}'
+
+    class Meta:
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранные'
+
+class Like(models.Model):
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='like')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='like')
+    like = models.BooleanField(default=False, blank=True)
+
+    def __str__(self):
+        return f'{self.author.name} liked {self.product}'
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
