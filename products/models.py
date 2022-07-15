@@ -2,6 +2,8 @@ from django.db import models
 from slugify import slugify
 from django.contrib.auth import get_user_model
 
+from accounts.models import User # likes
+
 class Brand(models.Model):
     name = models.CharField(max_length=150, primary_key=True)
     slug = models.SlugField(max_length=150, blank=True)
@@ -63,6 +65,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='products', null=True, blank=True)
+    likes = models.ManyToManyField(User, related_name='user_likes') # likes
 
     def __str__(self):
         return self.title

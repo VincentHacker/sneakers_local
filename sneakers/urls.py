@@ -39,4 +39,5 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     path('', include('products.urls')),
     path('', include('orders.urls')),
+    # path('like/<int:pk>', LikeView, name = 'user_like'),
 ]
