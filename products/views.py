@@ -37,16 +37,17 @@ class ProductViewSet(ModelViewSet):
     def like(self, request, pk=None):
         product = self.get_object()
         user = request.user
+
         try:
-            like = Like.objects.get(title=product, user=user)
-            like.like = not like.like
-            if like.like:
-                like.save()
+            like = Like.objects.filter(product_id=product, author=user)
+            mauler = not like[0].like
+            if mauler:
+                like[0].save()
             else:
                 like.delete()
-            message = 'Нравится' if like.like else 'Не нравится'
-        except Like.DoesNotExist:
-            Like.objects.create(title=product, user=user, is_liked=True)
+            message = 'Нравится' if like else 'Не нравится'
+        except IndexError:
+            Like.objects.create(product_id=product.id, author=user, like=True)
             message = 'Нравится'
         return Response(message, status=200)
 
@@ -55,15 +56,15 @@ class ProductViewSet(ModelViewSet):
         product = self.get_object()
         user = request.user
         try:
-            favorites = Favorites.objects.get(title=product, user=user)
-            favorites.favorites = not favorites.favorites
-            if favorites.favorites:
-                favorites.save()
+            favorites = Favorites.objects.filter(product_id=product, author=user)
+            mauler = not favorites[0].favorites
+            if mauler:
+                favorites[0].save()
             else:
                 favorites.delete()
-            message = 'В избранном' if favorites.favorites else 'Не в избранном'
-        except Favorites.DoesNotExist:
-            Favorites.objects.create(title=product, user=user, is_favorite=True)
+            message = 'В избранном' if favorites else 'Не в избранном'
+        except IndexError:
+            Favorites.objects.create(product_id=product.id, author=user, favorites=True)
             message = 'В избранном'
         return Response(message, status=200)
 
@@ -78,24 +79,24 @@ class CommentViewSet(ModelViewSet):
         return super().get_permissions()
 
 
-class LikeViewSet(ModelViewSet):
-    queryset = Like.objects.all()
-    serializer_class = LikeSerializer
+# class LikeViewSet(ModelViewSet):
+#     queryset = Like.objects.all()
+#     serializer_class = LikeSerializer
 
-    def get_permissions(self):
-        if self.action in ['destroy', 'update', 'partial_update']:
-            self.permission_classes = [IsAuthor]
-        return super().get_permissions()
+#     def get_permissions(self):
+#         if self.action in ['destroy', 'post']:
+#             self.permission_classes = [IsAuthor]
+#         return super().get_permissions()
 
 
-class FavoritesViewSet(ModelViewSet):
-    queryset = Favorites.objects.all()
-    serializer_class = FavoritesSerializer
+# class FavoritesViewSet(ModelViewSet):
+#     queryset = Favorites.objects.all()
+#     serializer_class = FavoritesSerializer
 
-    def get_permissions(self):
-        if self.action in ['destroy', 'update', 'partial_update']:
-            self.permission_classes = [IsAuthor]
-        return super().get_permissions()
+#     def get_permissions(self):
+#         if self.action in ['destroy', 'post']:
+#             self.permission_classes = [IsAuthor]
+#         return super().get_permissions()
 
 
 class ImageView(ModelViewSet):
