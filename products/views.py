@@ -2,6 +2,9 @@ from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework import permissions
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 
 from products.filters import ProductPriceFilter
 
@@ -17,6 +20,7 @@ class ProductViewSet(ModelViewSet):
     search_fields = ['title', 'description']
     filterset_class = ProductPriceFilter
 
+
     def get_serializer_class(self):
         if self.action == 'list':
             return ProductSerializer
@@ -28,6 +32,41 @@ class ProductViewSet(ModelViewSet):
         elif self.action in ['destroy', 'update', 'partial_update', 'create']:
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
+    
+    @action(['POST', 'DELETE'], detail=True)
+    def like(self, request, pk=None):
+        product = self.get_object()
+        user = request.user
+        try:
+            like = Like.objects.get(title=product, user=user)
+            like.like = not like.like
+            if like.like:
+                like.save()
+            else:
+                like.delete()
+            message = 'Нравится' if like.like else 'Не нравится'
+        except Like.DoesNotExist:
+            Like.objects.create(title=product, user=user, is_liked=True)
+            message = 'Нравится'
+        return Response(message, status=200)
+
+    @action(['POST', 'DELETE'], detail=True)
+    def favorite(self, request, pk=None):
+        product = self.get_object()
+        user = request.user
+        try:
+            favorites = Favorites.objects.get(title=product, user=user)
+            favorites.favorites = not favorites.favorites
+            if favorites.favorites:
+                favorites.save()
+            else:
+                favorites.delete()
+            message = 'В избранном' if favorites.favorites else 'Не в избранном'
+        except Favorites.DoesNotExist:
+            Favorites.objects.create(title=product, user=user, is_favorite=True)
+            message = 'В избранном'
+        return Response(message, status=200)
+
 
 class CommentViewSet(ModelViewSet):
     queryset = CommentRating.objects.all()
@@ -47,6 +86,7 @@ class LikeViewSet(ModelViewSet):
         if self.action in ['destroy', 'update', 'partial_update']:
             self.permission_classes = [IsAuthor]
         return super().get_permissions()
+
 
 class FavoritesViewSet(ModelViewSet):
     queryset = Favorites.objects.all()
