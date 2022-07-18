@@ -2,6 +2,8 @@ from django.db import models
 from slugify import slugify
 from django.contrib.auth import get_user_model
 
+from accounts.models import User # likes
+
 class Brand(models.Model):
     name = models.CharField(max_length=150)
     slug = models.SlugField(max_length=150, blank=True, primary_key=True)
