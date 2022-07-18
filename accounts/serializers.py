@@ -23,7 +23,7 @@ class RegistrationSerializer(serializers.Serializer):
         pass1 = attrs.get('password')
         pass2 = attrs.pop('password_confirm')
         if pass1 != pass2:
-            raise serializers.ValidationError('Пароль не совпадают')
+            raise serializers.ValidationError('Пароли не совпадают')
         return super().validate(attrs)
 
     def create(self):

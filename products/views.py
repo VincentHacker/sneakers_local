@@ -1,3 +1,5 @@
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
@@ -79,14 +81,14 @@ class CommentViewSet(ModelViewSet):
         return super().get_permissions()
 
 
-class ImageView(ModelViewSet):
+class ImageView(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, GenericViewSet):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             self.permission_classes = [permissions.AllowAny]
-        elif self.action in ['destroy', 'update', 'partial_update', 'create']:
+        elif self.action in ['destroy', 'create']:
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
 

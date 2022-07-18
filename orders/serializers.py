@@ -26,4 +26,14 @@ class OrderSerializer(serializers.ModelSerializer):
             total_sum += item['product'].price * item['quantity']
         order.total_sum = total_sum
         order.save()
+#         order.create_confirmition_code()
+#         order.send_confirmition_code()
         return order
+
+
+# class OrderConfSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Order
+#         fields = ['confirmition_code', 'confirmition']
+
+# TODO: Написать views для подтверждения заказа

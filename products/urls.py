@@ -7,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register('products', ProductViewSet)
 router.register('comments', CommentViewSet)
-router.register('image', ImageView)
+router.register('image', ImageView, basename='image')
 router.register('brand', BrandViewSet)
 router.register('snekers_type', SneakersTypeViewSet)
 
