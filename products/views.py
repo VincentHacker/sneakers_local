@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from products.filters import ProductPriceFilter
 
 from .models import Favorites, Like, Product, CommentRating, Image, Brand, SneakersType
-from .serializers import BrandSerializer, FavoritesSerializer, LikeSerializer, ProductSerializer, ReviewSerializer, ImageSerializer, SnekersTypeSerializer
+from .serializers import BrandSerializer, ProductSerializer, ReviewSerializer, ImageSerializer, SnekersTypeSerializer
 from .permissions import IsAuthor
 
 
@@ -33,7 +33,7 @@ class ProductViewSet(ModelViewSet):
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
     
-    @action(['POST', 'DELETE'], detail=True)
+    @action(['POST'], detail=True)
     def like(self, request, pk=None):
         product = self.get_object()
         user = request.user
@@ -51,7 +51,7 @@ class ProductViewSet(ModelViewSet):
             message = 'Нравится'
         return Response(message, status=200)
 
-    @action(['POST', 'DELETE'], detail=True)
+    @action(['POST'], detail=True)
     def favorite(self, request, pk=None):
         product = self.get_object()
         user = request.user
@@ -77,26 +77,6 @@ class CommentViewSet(ModelViewSet):
         if self.action in ['destroy', 'update', 'partial_update']:
             self.permission_classes = [IsAuthor]
         return super().get_permissions()
-
-
-# class LikeViewSet(ModelViewSet):
-#     queryset = Like.objects.all()
-#     serializer_class = LikeSerializer
-
-#     def get_permissions(self):
-#         if self.action in ['destroy', 'post']:
-#             self.permission_classes = [IsAuthor]
-#         return super().get_permissions()
-
-
-# class FavoritesViewSet(ModelViewSet):
-#     queryset = Favorites.objects.all()
-#     serializer_class = FavoritesSerializer
-
-#     def get_permissions(self):
-#         if self.action in ['destroy', 'post']:
-#             self.permission_classes = [IsAuthor]
-#         return super().get_permissions()
 
 
 class ImageView(ModelViewSet):
