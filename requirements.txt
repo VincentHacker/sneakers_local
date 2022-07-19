@@ -13,3 +13,7 @@ drf-yasg
 gunicorn
 django-cors-headers
 whitenoise
+
+requests
+bs4
+lxml

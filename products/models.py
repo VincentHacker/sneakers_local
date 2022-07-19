@@ -37,31 +37,13 @@ class SneakersType(models.Model):
 
 
 class Product(models.Model):
-    MALE_CHOICE = (
-        ('male', 'Мужские'),
-        ('female', 'Женские'),
-    )
-
-    SIZE_CHOICE = (
-        (36, '36'),
-        (37, '37'),
-        (38, '38'),
-        (39, '39'),
-        (40, '40'),
-        (41, '41'),
-        (42, '42'),
-        (43, '43'),
-        (44, '44'),
-        (45, '45'),
-    )
-
     title = models.CharField(max_length=155)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='product')
     sneakers_type = models.ForeignKey(SneakersType, on_delete=models.CASCADE, related_name='product')
-    male = models.CharField(max_length=20, choices=MALE_CHOICE)
-    size = models.IntegerField(choices=SIZE_CHOICE)
+    size = models.PositiveSmallIntegerField()
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='products', blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -69,18 +51,6 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'Кроссовки'
         verbose_name_plural = 'Кроссовки'
-
-
-class Image(models.Model):
-    boots = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='boots_image')
-    image = models.ImageField(upload_to='products')
-
-    def __str__(self):
-        return f'{self.boots}'
-    
-    class Meta:
-        verbose_name = 'Картина'
-        verbose_name_plural = 'Картины'
 
 
 class CommentRating(models.Model):

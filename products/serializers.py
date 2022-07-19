@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, CommentRating, Image, Brand, SneakersType, Like, Favorites
+from .models import Product, CommentRating, Brand, SneakersType, Like, Favorites
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,12 +40,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
     
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ['boots', 'image', 'id']
-
-
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -53,7 +47,6 @@ class ProductSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep['image'] = ImageSerializer(instance.boots_image.all(), many=True).data
         rep['like'] = LikeSerializer(instance.like.all(), many=True).data
         rep['favorites'] = FavoritesSerializer(instance.favorites.all(), many=True).data
         rep['rating'] = ReviewSerializer(instance.comments.all(), many=True).data
