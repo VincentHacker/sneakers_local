@@ -3,6 +3,11 @@ djangorestframework
 psycopg2-binary
 Pillow
 
+celery==5.2.7
+redis==4.3.3
+django-celery-beat
+django-celery-results
+
 django-filter
 python-decouple
 djangorestframework_simplejwt
@@ -13,7 +18,3 @@ drf-yasg
 gunicorn
 django-cors-headers
 whitenoise
-
-requests
-bs4
-lxml
