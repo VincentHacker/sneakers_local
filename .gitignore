@@ -269,3 +269,5 @@ pip-selfcheck.json
 
 heroku_setup.txt
 TgBot
+Celery
+celery.py
