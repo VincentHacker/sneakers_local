@@ -29,7 +29,7 @@ def get_data(table):
 
 def write_to_json(data):
     import json
-    with open('/home/asan/Desktop/Makers/Hackathon/TgBot/rate.json', 'w') as file:
+    with open('/home/atai/Desktop/Bootcamp/week11/sneakers/TgBot/rate.json', 'w') as file:
         json.dump(data, file, indent=4)
 
 def parse():

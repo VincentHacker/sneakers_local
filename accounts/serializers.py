@@ -30,6 +30,7 @@ class RegistrationSerializer(serializers.Serializer):
     def create(self):
         user = User.objects.create_user(**self.validated_data)
         user.create_activation_code()
+        user.send_activation_code()
         return user
 
 
@@ -53,9 +54,7 @@ class LoginSerializer(TokenObtainPairSerializer):
         if not user.check_password(password):
             raise serializers.ValidationError('Неверный пароль')
         return super().validate(attrs)
-
-    
-
+ 
 
 class RestorePasswordSerializer(serializers.Serializer):
     email = serializers.EmailField()

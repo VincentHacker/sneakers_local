@@ -22,7 +22,7 @@ async def start(message):
 @dp.message_handler(commands='get_convert')
 async def get_converter(message):
     parse()
-    with open('/home/asan/Desktop/Makers/Hackathon/TgBot/rate.json') as file:
+    with open('/home/atai/Desktop/Bootcamp/week11/sneakers/TgBot/rate.json') as file:
         rate = json.load(file)
     
     await message.answer(f'<b>{datetime.now().date()}</b>')
@@ -34,7 +34,7 @@ async def get_converter(message):
 @dp.message_handler(commands='get_weather')
 async def get_weather(message):
     main()
-    with open('/home/asan/Desktop/Makers/Hackathon/TgBot/weather.json') as file:
+    with open('/home/atai/Desktop/Bootcamp/week11/sneakers/TgBot/weather.json') as file:
         weather = json.load(file)
 
     await message.answer(f'<b>{datetime.now().date()}</b>')

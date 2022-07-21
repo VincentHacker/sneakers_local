@@ -36,7 +36,7 @@ def get_weather(city, token_weather):
 
         data = (f'В городе: {city}\nТемпература: {cur_weather}C {wd}\nВлажность: {humidity}\nСкорость ветра: {wind}м/с\nРассвет в: {sunrise}\nЗакат в: {sunset}\nПродолжительность дня: {length_day}\nПродолжительность ночи: {length_night}')
 
-        with open('/home/asan/Desktop/Makers/Hackathon/TgBot/weather.json', 'w') as file:
+        with open('/home/atai/Desktop/Bootcamp/week11/sneakers/TgBot/weather.json', 'w') as file:
             json.dump(data, file, indent=4)
         
         

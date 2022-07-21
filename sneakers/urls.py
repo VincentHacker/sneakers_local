@@ -14,7 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+# from django.conf.urls import url # for social media
+
+
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -42,6 +45,11 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     path('', include('products.urls')),
     path('', include('orders.urls')),
+    # path('api-auth/', include('rest_framework.urls')), # for social media
+    # path('account/', include('rest_framework_social_oauth2.urls')), #for social media
+    path('account/', include('drf_social_oauth2.urls', namespace='drf')), #for social media
+    # re_path('account/', include('drf_social_oauth2.urls', namespace='social')), #for social media
+    # path('oauth', include('social_django.urls', namespace='social')), #for social media
     # path('like/<int:pk>', LikeView, name = 'user_like'),
 ]
 

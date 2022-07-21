@@ -14,7 +14,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-    def create_user(self, email, password, name, **extra_fields):
+    def create_user(self, email, password=None, name=None, **extra_fields):
         extra_fields.setdefault('is_active', False)
         extra_fields.setdefault('is_staff', False)
         return self._create(email, password, name, **extra_fields)
@@ -55,6 +55,15 @@ class User(AbstractBaseUser):
         self.save()
         return code
 
+    def send_activation_code(self):
+        activation_link = f'https://dry-sands-45075.herokuapp.com/account/activation/{self.activation_code}'
+        send_mail(
+            'Account activation', 
+            message=activation_link, 
+            from_email=settings.EMAIL_HOST_USER, 
+            recipient_list=[self.email], 
+            fail_silently=False
+        )
 
     class Meta:
         verbose_name = 'Пользователь'

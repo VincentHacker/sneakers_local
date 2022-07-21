@@ -15,6 +15,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from pickle import TRUE
+from telnetlib import AUTHENTICATION
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -56,6 +57,13 @@ INSTALLED_APPS = [
 
     # 'django_celery_beat',
     # 'django_celery_results',
+
+    'oauth2_provider', # for social media
+    'social_django', # for social media
+    # 'rest_framework_social_oauth2', # for social media
+    'drf_social_oauth2', # for social media
+
+
 ]
 
 MIDDLEWARE = [    
@@ -68,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'social_django.middleware.SocialAuthExceptionMiddleware', # for social media
 ]
 
 ROOT_URLCONF = 'sneakers.urls'
@@ -83,6 +92,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends', # for social media
+                'social_django.context_processors.login_redirect', # for social media
             ],
         },
     },
@@ -160,7 +171,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 9,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication',
+                                       'oauth2_provider.contrib.rest_framework.OAuth2Authentication', # for social media
+                                    #    'rest_framework_social_oauth2.authentication.SocialAuthentication',], # for social media
+                                       'drf_social_oauth2.authentication.SocialAuthentication',], # for social media
 }
 
 
@@ -171,6 +185,9 @@ EMAIL_HOST_USER = config('EMAIL_HOST')
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
+# LOGIN_URL = 'login' # for social media
+# LOGOUT_URL = 'logout' # for social media
+# LOGIN_REDIRECT_URL = 'dashboard' # for social media
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
@@ -225,3 +242,17 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CELERY_TIMEZONE = 'UTC'
 # REDIS_HOST = 'localhost'
 # REDIS_PORT = '6379'
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '8224077'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'cRqCUroLyV15gvCCW9YG'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    # 'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    'drf_social_oauth2.backends.DjangoOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+#aad120ffaad120ffaad120ff0caaac5db2aaad1aad120ffc809df892fc48a9295647e42
+
+# https://login.vk.com/?act=openapi&oauth=1&aid=8224077&location=127.0.0.1&new=1&response_type=code
