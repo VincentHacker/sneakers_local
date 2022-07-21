@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from products.filters import ProductPriceFilter
 
 from .models import Favorites, Like, Product, CommentRating, Brand, SneakersType
-from .serializers import BrandSerializer, ProductSerializer, ReviewSerializer, SnekersTypeSerializer
+from .serializers import BrandSerializer, FavoritesSerializer, LikeSerializer, ProductSerializer, ReviewSerializer, SnekersTypeSerializer
 from .permissions import IsAuthor
 
 
@@ -35,7 +35,7 @@ class ProductViewSet(ModelViewSet):
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
     
-    @action(['POST'], detail=True)
+    @action(['GET', 'POST'], detail=True)
     def like(self, request, pk=None):
         product = self.get_object()
         user = request.user
@@ -53,7 +53,7 @@ class ProductViewSet(ModelViewSet):
             message = 'Нравится'
         return Response(message, status=200)
 
-    @action(['POST'], detail=True)
+    @action(['GET', 'POST'], detail=True)
     def favorite(self, request, pk=None):
         product = self.get_object()
         user = request.user
@@ -103,3 +103,13 @@ class SneakersTypeViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, Generi
         elif self.action in ['create']:
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
+
+
+class LikeViews(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+
+class FavoritesViews(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
+    queryset = Favorites.objects.all()
+    serializer_class = FavoritesSerializer

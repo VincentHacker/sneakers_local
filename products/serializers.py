@@ -1,4 +1,5 @@
 from rest_framework import serializers
+import json
 
 from .models import Product, CommentRating, Brand, SneakersType, Like, Favorites
 
@@ -16,13 +17,18 @@ class SnekersTypeSerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ['author', 'product', 'like']
+        fields = ['product', 'like']
 
 
 class FavoritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorites
         fields = ['author', 'product', 'favorites']
+
+    def to_representation(self, instance):
+        represent = super().to_representation(instance)
+        represent['product'] = f'https://dry-sands-45075.herokuapp.com/products/{instance.product_id}'
+        return represent
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -46,20 +52,17 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep['like'] = LikeSerializer(instance.like.all(), many=True).data
-        rep['favorites'] = FavoritesSerializer(instance.favorites.all(), many=True).data
-        rep['rating'] = ReviewSerializer(instance.comments.all(), many=True).data
-        rep['comments'] = ReviewSerializer(instance.comments.all(), many=True).data
-
-        rating = [dict(i)['rating'] for i in rep['rating']]
-        like = sum([dict(i)['like'] for i in rep['like']])
-        rep['like'] = like
-        favorites = sum([dict(i)['favorites'] for i in rep['favorites']])
-        rep['favorites'] = favorites
+        represent = super().to_representation(instance)
+        represent['like'] = LikeSerializer(instance.like.all(), many=True).data
+        represent['favorites'] = FavoritesSerializer(instance.favorites.all(), many=True).data
+        represent['rating'] = ReviewSerializer(instance.comments.all(), many=True).data
+        represent['comments'] = ReviewSerializer(instance.comments.all(), many=True).data
+        rating = [dict(i)['rating'] for i in represent['rating']]
+        represent['like'] = sum([dict(i)['like'] for i in represent['like']])
+        represent['favorites'] = sum([dict(i)['favorites'] for i in represent['favorites']])
         if rating:
-            rep['rating'] = round((sum(rating) / len(rating)), 2)
-            return rep
+            represent['rating'] = round((sum(rating) / len(rating)), 2)
+            return represent
         else:
-            rep['rating'] = None
-            return rep
+            represent['rating'] = None
+            return represent
