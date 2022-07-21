@@ -55,8 +55,8 @@ INSTALLED_APPS = [
     'orders',
     'products',
 
-    # 'django_celery_beat',
-    # 'django_celery_results',
+    'django_celery_beat',
+    'django_celery_results',
 
     'oauth2_provider', # for social media
     'social_django', # for social media
@@ -185,9 +185,6 @@ EMAIL_HOST_USER = config('EMAIL_HOST')
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
-# LOGIN_URL = 'login' # for social media
-# LOGOUT_URL = 'logout' # for social media
-# LOGIN_REDIRECT_URL = 'dashboard' # for social media
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
@@ -233,15 +230,15 @@ SWAGGER_SETTINGS = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-# CELERY_BROKER_URL = 'redis://localhost:6379'
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'UTC'
-# REDIS_HOST = 'localhost'
-# REDIS_PORT = '6379'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '8224077'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'cRqCUroLyV15gvCCW9YG'
@@ -255,4 +252,3 @@ AUTHENTICATION_BACKENDS = (
 
 #aad120ffaad120ffaad120ff0caaac5db2aaad1aad120ffc809df892fc48a9295647e42
 
-# https://login.vk.com/?act=openapi&oauth=1&aid=8224077&location=127.0.0.1&new=1&response_type=code

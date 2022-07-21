@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.core.mail import send_mail
 
-# from accounts.tasks import send_activation_code
+from accounts.tasks import send_activation_code
 
 User = get_user_model()
 
@@ -19,7 +19,6 @@ class RegistrationSerializer(serializers.Serializer):
             raise serializers.ValidationError('Почта уже занята')
         return email
     
-    # в attrs прилетают все заполненные поля: email, name, password, password_confirm
     def validate(self, attrs):
         pass1 = attrs.get('password')
         pass2 = attrs.pop('password_confirm')
@@ -30,12 +29,9 @@ class RegistrationSerializer(serializers.Serializer):
     def create(self):
         user = User.objects.create_user(**self.validated_data)
         user.create_activation_code()
-        user.send_activation_code()
+        # user.send_activation_code()
+        send_activation_code.delay(user.email, user.activation_code)
         return user
-
-
-# class ActivationSerializer(serializers.Serializer):
-#     ...
 
 
 class LoginSerializer(TokenObtainPairSerializer):
