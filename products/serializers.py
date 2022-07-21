@@ -1,4 +1,5 @@
 from rest_framework import serializers
+import json
 
 from .models import Product, CommentRating, Brand, SneakersType, Like, Favorites
 
@@ -22,7 +23,12 @@ class LikeSerializer(serializers.ModelSerializer):
 class FavoritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorites
-        fields = ['product', 'favorites']
+        fields = ['author', 'product', 'favorites']
+
+    def to_representation(self, instance):
+        represent = super().to_representation(instance)
+        represent['product'] = f'https://dry-sands-45075.herokuapp.com/products/{instance.product_id}'
+        return represent
 
 
 class ReviewSerializer(serializers.ModelSerializer):
