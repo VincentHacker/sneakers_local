@@ -35,7 +35,7 @@ class ProductViewSet(ModelViewSet):
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
     
-    @action(['POST'], detail=True)
+    @action(['GET', 'POST'], detail=True)
     def like(self, request, pk=None):
         product = self.get_object()
         user = request.user
@@ -53,7 +53,7 @@ class ProductViewSet(ModelViewSet):
             message = 'Нравится'
         return Response(message, status=200)
 
-    @action(['POST'], detail=True)
+    @action(['GET', 'POST'], detail=True)
     def favorite(self, request, pk=None):
         product = self.get_object()
         user = request.user
