@@ -1,6 +1,6 @@
 # sneakers_local
 
-1. In this repo celery local is included
+1. In this repo celery local is included.
 To run celery apply the command in the terminal:
 celery -A sneakers worker --beat -l info -S django
 
